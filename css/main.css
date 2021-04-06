@@ -1,13 +1,13 @@
 body {
     font-family: 'Baloo Thambi 2', cursive;
     margin: 0;
-}
-
-h1 {
+  }
+  
+  h1 {
     font-size: 300%;
-}
-
-main {
+  }
+  
+  main {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -16,57 +16,63 @@ main {
     background-image: url('https://picsum.photos/1600/1050');
     background-size: cover;
     background-position: center;
-}
-
-.weather-info {
+  }
+  
+  .weather-info {
     height: auto;
     width: 40%;
     max-width: 1000px;
     max-height: 700px;
     padding: 5%;
     border-radius: 10px;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(245, 245, 245, 0.9) 100%);
-    box-shadow: 0px 0px 10px 3px rgba(36, 36, 36, .05);
+    background: linear-gradient(135deg, rgba(255,255,255,1) 0%, rgba(245,245,245,0.9) 100%);
+    box-shadow: 0px 0px 10px 3px rgba(36,36,36,.05);
     transition-duration: .5s;
     transition-property: opacity;
-}
-
-.weather-info__search-view {
+  }
+  
+  .weather-info__search-view {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
     height: 200px;
-}
-
-.weather-info__search-view label {
+  }
+  
+  .weather-info__search-view label {
     font-size: 200%;
-}
-
-.weather-info__search-view input {
+  }
+  
+  .weather-info__search-view input {
     padding: 10px 50px;
     border: 2px solid black;
     font-size: 150%;
     text-align: center;
-}
-
-.weather-info__search-view button {
+  }
+  
+  .weather-info__search-view button {
     padding: 10px 50px;
     border: 2px solid black;
     font-size: 100%;
-}
-
-.weather-info__forecast-view {
+  }
+  
+  .weather-info__forecast-view {
     display: none;
-}
-
-.weather-info__city {
+  }
+  
+  .weather-info__city {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-.weather-info__btn-return {
+  }
+  
+  .weather-info__btn-return {
     padding: 5px 25px;
     border: 2px solid black;
+  }
+.weather-info__city img {
+    width: 115px;
+    height: 115px;
+    position: relative;
+    right: 15%;
 }
