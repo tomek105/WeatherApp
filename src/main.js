@@ -1,106 +1,90 @@
-import {
-    getWheaterByCity
-} from "./apiService.js";
-const viewElement = {};
+import { getWeatherByCity } from './apiService.js';
+import { mapListToDOMElements } from './DOMActions.js';
 
-const getDOMElem = (id) => {
-    return document.getElementById(id);
-}
-const connectHTMLElements = () => {
-    viewElement.mainContainer = getDOMElem('mainContainer');
-    viewElement.weatherSearchView = getDOMElem('weatherSearchView');
-    viewElement.weatherForecastView = getDOMElem('weatherForecastView');
+class WeatherApp {
+  constructor() {
+    this.viewElems = {}
+    this.initializeApp();
+  }
 
-    viewElement.searchInput = getDOMElem('searchInput');
-    viewElement.searchButton = getDOMElem('searchButton');
+  initializeApp = () => {
+    this.connectDOMElements();
+    this.setupListeners();
+  }
 
-    viewElement.weatherCity = getDOMElem('weatherCity');
-    viewElement.weatherIcon = getDOMElem('weatherIcon');
+  connectDOMElements = () => {
+    const listOfIds = Array.from(document.querySelectorAll('[id]')).map(elem => elem.id);
+    this.viewElems = mapListToDOMElements(listOfIds);
+  }
 
-    viewElement.weatherCurrentTemp = getDOMElem('weatherCurrentTemp');
-    viewElement.weatherMaxTemp = getDOMElem('weatherMaxTemp');
-    viewElement.weatherMinTemp = getDOMElem('weatherMinTemp');
+  setupListeners = () => {
+    this.viewElems.searchInput.addEventListener('keydown', this.handleSubmit);
+    this.viewElems.searchButton.addEventListener('click', this.handleSubmit);
+    this.viewElems.returnToSearchBtn.addEventListener('click', this.returnToSearch);
+  }
 
-    viewElement.returnToSearchBtn = getDOMElem('returnToSearchBtn');
-}
-
-const setupListeners = () => {
-    viewElement.searchInput.addEventListener('keydown', onEnterSubmit);
-    viewElement.searchButton.addEventListener('click', onClickSubmit);
-    viewElement.returnToSearchBtn.addEventListener('click', returnToTheSearch);
-}
-
-
-const initializeApp = () => {
-    connectHTMLElements();
-    setupListeners();
-}
-
-
-const onEnterSubmit = (event) => {
-    if (event.key === "Enter") {
-        fadeInOut();
-        let query = viewElement.searchInput.value;
-        getWheaterByCity(query).then(data => {           
-            displayWeatherData(data);
-        });
+  handleSubmit = () => {
+    if (event.type === 'click' || event.key === 'Enter') {
+      this.fadeInOut();
+      let query = this.viewElems.searchInput.value;
+      getWeatherByCity(query).then(data => {
+        this.displayWeatherData(data);
+        this.viewElems.searchInput.style.borderColor = 'black';
+        this.viewElems.warningText.style.display = "none";
+        this.viewElems.searchInput.value = "";
+      }).catch(() => {
+        this.fadeInOut();
+        this.viewElems.searchInput.style.borderColor = 'red';
+        this.viewElems.warningText.style.display = "initial";
+      })
     }
-};
+  }
 
-const onClickSubmit = () => {
-    fadeInOut();
-    let query = viewElement.searchInput.value;
-    getWheaterByCity(query).then(data => {
-        console.log(data);
-        displayWeatherData(data);
-    });
-};
-
-const displayWeatherData = data =>{
-    switchView();
-    fadeInOut();
-    console.log(data)
-    const weather = data.consolidated_weather[0];
-
-    viewElement.weatherCity.innerText = data.title;
-    viewElement.weatherIcon.src = `https://www.metaweather.com/static/img/weather/${weather.weather_state_abbr}.svg`;
-    viewElement.weatherIcon.alt = weather.weather_state_name;
-
-    const currTemp = weather.the_temp.toFixed(2);
-    const minTemp = weather.min_temp.toFixed(2);
-    const maxTemp = weather.max_temp.toFixed(2);
-
-    viewElement.weatherCurrentTemp.innerText =`Current temperature is: ${currTemp}°C`
-    viewElement.weatherMaxTemp.innerText = `Max temperature is: ${maxTemp}°C`
-    viewElement.weatherMinTemp.innerText = `Min temperature is: ${minTemp}°C`
-
-}
-
-const fadeInOut = () => {
-    if (viewElement.mainContainer.style.opacity === '1' || viewElement.mainContainer.style.opacity === '') {
-        viewElement.mainContainer.style.opacity = '0';
+  fadeInOut = () => {
+    if (this.viewElems.mainContainer.style.opacity === '1' || this.viewElems.mainContainer.style.opacity === '') {
+      this.viewElems.mainContainer.style.opacity = '0';
     } else {
-        viewElement.mainContainer.style.opacity = '1'
+      this.viewElems.mainContainer.style.opacity = '1';
     }
-}
+  }
 
-
-const switchView = () => {
-    if (viewElement.weatherSearchView.style.display !== 'none') {
-        viewElement.weatherSearchView.style.display = 'none'
-        viewElement.weatherForecastView.style.display = 'block'
+  switchView = () => {
+    if (this.viewElems.weatherSearchView.style.display !== 'none') {
+      this.viewElems.weatherSearchView.style.display = 'none';
+      this.viewElems.weatherForecastView.style.display = 'block';
     } else {
-        viewElement.weatherForecastView.style.display = 'none'
-        viewElement.weatherSearchView.style.display = 'flex'
+      this.viewElems.weatherForecastView.style.display = 'none';
+      this.viewElems.weatherSearchView.style.display = 'flex';
     }
-}
+  }
 
-const returnToTheSearch = () => {
-    fadeInOut()
+  returnToSearch = () => {
+    this.fadeInOut();
+
     setTimeout(() => {
-        switchView();
-        fadeInOut()
+      this.switchView();
+      this.fadeInOut();
     }, 500);
+  }
+
+  displayWeatherData = data => {
+    this.switchView();
+    this.fadeInOut();
+  
+    const weather = data.consolidated_weather[0];
+  
+    this.viewElems.weatherCity.innerText = data.title;
+    this.viewElems.weatherIcon.src = `https://www.metaweather.com/static/img/weather/${weather.weather_state_abbr}.svg`;
+    this.viewElems.weatherIcon.alt = weather.weather_state_name;
+    
+    const currTemp = weather.the_temp.toFixed(0);
+    const maxTemp = weather.max_temp.toFixed(0);
+    const minTemp = weather.min_temp.toFixed(0);
+  
+    this.viewElems.weatherCurrentTemp.innerText = `Current temperature: ${currTemp}°C`;
+    this.viewElems.weatherMaxTemp.innerText = `Max temperature: ${maxTemp}°C`;
+    this.viewElems.weatherMinTemp.innerText = `Min temperature: ${minTemp}°C`;
+  }
 }
 
-document.addEventListener("DOMContentLoaded", initializeApp)
+document.addEventListener('DOMContentLoaded', new WeatherApp());
