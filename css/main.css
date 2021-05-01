@@ -19,10 +19,6 @@ main {
 }
 
 .weather-info {
-  height: auto;
-  width: 40%;
-  max-width: 1000px;
-  max-height: 700px;
   padding: 5%;
   border-radius: 10px;
   background: linear-gradient(135deg, rgba(255,255,255,1) 0%, rgba(245,245,245,0.9) 100%);
@@ -65,15 +61,51 @@ main {
   display: none;
 }
 
+.weatherCity{
+  margin-right: 5%;
+}
+
 .weather-info__city {
   display: flex;
-  justify-content: space-between;
   align-items: center;
 }
+
 .weather-info__city img {
   width: fit-content;
+  margin-left: 5%;
 }
+
 .weather-info__btn-return {
   padding: 5px 25px;
   border: 2px solid black;
+}
+
+.weather-info__longterm{
+  display: flex;
+  justify-content: space-between;
+}
+
+.weather-info__longterm div{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin: 10px;
+  border: 1px transparent solid;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px 3px rgb(36 36 36 / 5%);
+  transition-duration: 1.5s;
+}
+
+.weather-info__longterm div:hover{
+  transform: translate(15px, 15px) scale(1.5);
+  background-color: white;
+}
+
+.weather-info__longterm img{
+  width: 75px;
+  height: 75px;
+}
+
+.weather-info__longterm p{
+  font-size: 12px;
 }
